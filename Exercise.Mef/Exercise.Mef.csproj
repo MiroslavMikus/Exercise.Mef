@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\Communication.cs" />
+    <Compile Include="Services\ConsoleLogger.cs" />
     <Compile Include="InternalPlugin.cs" />
     <Compile Include="PluginHost.cs" />
     <Compile Include="Program.cs" />
