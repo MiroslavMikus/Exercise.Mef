@@ -19,30 +19,35 @@ namespace Exercise.Mef
 
         private static CompositionContainer _container;
 
-        [Import(RequiredCreationPolicy = CreationPolicy.NonShared)]
-        PluginHost host;
+        //[Import(RequiredCreationPolicy = CreationPolicy.NonShared)]
+        //PluginHost host;
+
+        [Import]
+        ExportFactory<PluginHost> HostFactory;
 
         static void Main(string[] args)
         {
             // create plugin directory
-            EnsureExist(_pluginDir);
+            Directory.CreateDirectory(_pluginDir);
 
             _container = CreateContainer();
 
-            var host1 = new Program();
-            _container.ComposeParts(host1);
+            var factory = new Program();
+            _container.ComposeParts(factory);
 
-            var host2 = new Program();
-            _container.ComposeParts(host2);
+            var host1 = factory.HostFactory.CreateExport().Value;
+            var host2 = factory.HostFactory.CreateExport().Value;
+            var host3 = factory.HostFactory.CreateExport().Value;
 
-            host1.host.Run("host1");
-
+            host1.Run("host1");
+            Console.WriteLine(Environment.NewLine);
+            host2.Run("host2");
+            Console.WriteLine(Environment.NewLine);
+            host3.Run("host3");
             Console.WriteLine(Environment.NewLine);
 
-            host2.host.Run("host2");
-
             // workers are non-shared instances
-            Debug.Assert(!host1.host._workers[0].Equals(host2.host._workers[0]));
+            //Debug.Assert(!host1.host._workers[0].Equals(host2.host._workers[0]));
 
             Console.ReadLine();
         }
@@ -58,6 +63,7 @@ namespace Exercise.Mef
             /// -> you dont have to use the <see cref="ExportAttribute"/> over the <see cref="PluginHost"/> class
             conventions.ForType<PluginHost>().Export();
 
+
             // load plugins from the current assembly
             AssemblyCatalog assemblyCat = new AssemblyCatalog(System.Reflection.Assembly.GetExecutingAssembly(), conventions);
 
@@ -65,14 +71,6 @@ namespace Exercise.Mef
             AggregateCatalog catalog = new AggregateCatalog(assemblyCat, dirCatalog);
 
             return new CompositionContainer(catalog);
-        }
-
-        private static void EnsureExist(string folder)
-        {
-            if (Directory.Exists(folder))
-            {
-                Directory.CreateDirectory(folder);
-            }
         }
 
         public void OnImportsSatisfied()
