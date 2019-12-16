@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Exercise.Mef.Api
 {
     [InheritedExport(typeof(IWorker))]
-    public interface IWorker
+    public interface IWorker : IDisposable
     {
         string DoWork(string input);
     }

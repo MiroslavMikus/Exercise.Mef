@@ -10,14 +10,18 @@ namespace Exercise.Mef.Plugin.FirstPlugin
 {
     public class FirstPluginWorker : IWorker
     {
-        [Import]
         private ILogger Logger;
 
-        //[ImportingConstructor]
-        //public FirstPluginWorker(ILogger logger)
-        //{
-        //    this.logger = logger;
-        //}
+        public void Dispose()
+        {
+            Logger.Log("Dispose first plugin");
+        }
+
+        [ImportingConstructor]
+        public FirstPluginWorker(ILogger logger)
+        {
+            Logger = logger;
+        }
 
         public string DoWork(string input)
         {

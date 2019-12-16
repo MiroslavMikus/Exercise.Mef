@@ -40,14 +40,18 @@ namespace Exercise.Mef
             var host3 = factory.HostFactory.CreateExport().Value;
 
             host1.Run("host1");
+            host1.Dispose();
             Console.WriteLine(Environment.NewLine);
+
             host2.Run("host2");
             Console.WriteLine(Environment.NewLine);
+
             host3.Run("host3");
             Console.WriteLine(Environment.NewLine);
 
-            // workers are non-shared instances
-            //Debug.Assert(!host1.host._workers[0].Equals(host2.host._workers[0]));
+            //workers are non - shared instances
+            Debug.Assert(!host1._workers[0].Equals(host2._workers[0]));
+            Console.WriteLine("Worker plugins are non shared instances!");
 
             Console.ReadLine();
         }

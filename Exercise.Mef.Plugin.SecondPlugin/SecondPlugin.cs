@@ -21,5 +21,10 @@ namespace Exercise.Mef.Plugin.SecondPlugin
 
             return $"Second plugin at work: {input}";
         }
+
+        public void Dispose()
+        {
+            Console.WriteLine("Dispose second plugin");
+        }
     }
 }

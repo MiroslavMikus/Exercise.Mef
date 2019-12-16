@@ -18,10 +18,16 @@ namespace Exercise.Mef
             this.logger = logger;
         }
 
+        public void Dispose()
+        {
+            logger.Log("Dispose internal plugin");
+        }
+
         public string DoWork(string input)
         {
             logger.Log($"{nameof(InternalPlugin)} is using ConsoleLogger");
             return $"{nameof(InternalPlugin)} plugin at work: {input}";
         }
+        
     }
 }
